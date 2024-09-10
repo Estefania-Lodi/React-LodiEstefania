@@ -1,0 +1,44 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+    padding: 10px 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: -4px 2px 20px rgba(171, 165, 165, 0.75);
+}
+
+.navBar h1 {
+    color: rgb(34, 80, 53);
+    font-style: italic;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+}
+
+h1 span {
+    font-size: 15px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    margin-right: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(34, 80, 53);
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #45a049;
+}
