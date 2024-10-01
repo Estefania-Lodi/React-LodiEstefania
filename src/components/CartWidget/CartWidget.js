@@ -1,6 +1,6 @@
 import React from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import './cartWidget.css';
+import './CartWidget.css';
 
 const CartWidget = ({ number }) => {
   const handleClick = (event) => {
