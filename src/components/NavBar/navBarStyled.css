@@ -1,0 +1,24 @@
+.navBar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #25814a;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navBar li {
+    list-style: none;
+}
+
+.navBar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navBar a:hover {
+    background-color: #4caf50;
+}

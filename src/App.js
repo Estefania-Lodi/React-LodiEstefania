@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+<<<<<<< HEAD
 import { CartProvider } from './components/CartContext';
 import NavBar from './components/Navbar';
 import ItemListContainer from './components/ItemListContainer';
@@ -21,6 +22,23 @@ const App = () => {
         </Routes>
       </Router>
     </CartProvider>
+=======
+import Navbar from './components/NavBar/Navbar';
+import ItemListContainer from './components/ItemListContainer/ItemListContainer';
+import './App.css';
+
+const App = () => {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ItemListContainer />} />
+        <Route path="/cremas" element={<ItemListContainer categoriaSeleccionada="cremas" />} />
+        <Route path="/maquillajes" element={<ItemListContainer categoriaSeleccionada="maquillajes" />} />
+        <Route path="/exfoliantes" element={<ItemListContainer categoriaSeleccionada="exfoliantes" />} />
+      </Routes>
+    </Router>
+>>>>>>> 0014833938095b2bcfa5ced9c3eff92521060ae8
   );
 };
 
