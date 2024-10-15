@@ -1,34 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import Navbar from './components/Navbar';
+import { CartProvider } from './components/CartContext';
+import NavBar from './components/Navbar';
 import ItemListContainer from './components/ItemListContainer';
-import ProductDetail from './components/ProductDetail';
-import './App.css';
+import ProductDetail from './components/ProductDetail/ProductDetail';
+import CartPage from './components/CartPage/CartPage';
 
-function App() {
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-
-  const handleCategorySelect = (category) => {
-    setCategoriaSeleccionada(category);
-  };
-
+const App = () => {
   return (
-    <Router>
-      <div>
-        <Navbar onSelectCategory={handleCategorySelect} />
-      </div>
-      <div>
+    <CartProvider>
+      <Router>
+        <NavBar/>
         <Routes>
-          <Route path="/" element={<ItemListContainer categoriaSeleccionada={categoriaSeleccionada} />} />
-          <Route path="/cremas" element={<ItemListContainer categoriaSeleccionada="cremas" />} />
-          <Route path="/maquillajes" element={<ItemListContainer categoriaSeleccionada="maquillajes" />} />
-          <Route path="/exfoliantes" element={<ItemListContainer categoriaSeleccionada="exfoliantes" />} />
+        <Route path="/" element={<ItemListContainer />} />
+          <Route path="/cremas" element={<ItemListContainer />} />
+          <Route path="/maquillajes" element={<ItemListContainer />} />
+          <Route path="/exfoliantes" element={<ItemListContainer />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </CartProvider>
   );
-}
+};
 
 export default App;

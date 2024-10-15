@@ -1,129 +1,78 @@
-import React, { useState } from 'react';
-import './itemListContainer.css';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
+import Product from './Product/Product';
+import productsData from './ProductsData';
 
-const productos = [
-  {
-    id: 1,
-    nombre: 'Kit pieles secas',
-    precio: 5000.00,
-    imagen: 'img/prod 1.png',
-    tamaño: 'grande',
-    categoria: 'cremas',
-  },
-  {
-    id: 2,
-    nombre: 'Kit pieles grasas',
-    precio: 5500.00,
-    imagen: 'img/prod 2.png',
-    categoria: 'cremas',
-  },
-  {
-    id: 3,
-    nombre: 'Kit pieles mixtas',
-    precio: 5800.00,
-    imagen: 'img/prod 3.png',
-    categoria: 'cremas',
-  },
-  {
-    id: 4,
-    nombre: 'Sombras',
-    precio: 8000.00,
-    imagen: 'img/maquillaje 1.jpg',
-    tamaño: 'grande',
-    categoria: 'maquillajes',
-  },
-  {
-    id: 5,
-    nombre: 'Brochas',
-    precio: 7500.00,
-    imagen: 'img/maquillaje 2.jpg',
-    categoria: 'maquillajes',
-  },
-  {
-    id: 6,
-    nombre: 'Rimel',
-    precio: 6800.00,
-    imagen: 'img/maquillaje 3.jpg',
-    categoria: 'maquillajes',
-  },
-  {
-    id: 7,
-    nombre: 'Exfoliante Facial',
-    precio: 8900.00,
-    imagen: 'img/exfoliante 1.jpg',
-    categoria: 'exfoliantes',
-  },
-  {
-    id: 8,
-    nombre: 'Exfoliante Corporal',
-    precio: 6700.00,
-    imagen: 'img/exfoliante 2.jpg',
-    categoria: 'exfoliantes',
-  },
-  // Agrega más productos
-];
+const ItemListContainer = () => {
+  const [sortedProducts, setSortedProducts] = useState([]);
+  const [sortType, setSortType] = useState('default');
+  const [currentCategory, setCurrentCategory] = useState('all');
+  const location = useLocation();
 
-function ItemListContainer({ categoriaSeleccionada }) {
-  const [carrito, setCarrito] = useState([]);
-  const [ordenAscendente, setOrdenAscendente] = useState(true);
+  useEffect(() => {
+    const path = location.pathname.toLowerCase();
+    const category = getCategoryFromPath(path);
+    setCurrentCategory(category);
+  }, [location.pathname]);
 
-  const agregarAlCarrito = (producto) => {
-    setCarrito([...carrito, producto]);
-    console.log(`Agregando ${producto.nombre} al carrito`);
+  useEffect(() => {
+    const sorted = getSortedProducts(productsData, currentCategory, sortType);
+    setSortedProducts(sorted);
+  }, [currentCategory, sortType]);
+
+  const getCategoryFromPath = (path) => {
+    if (path.includes('cremas')) return 'cremas';
+    if (path.includes('maquillajes')) return 'maquillajes';
+    if (path.includes('exfoliantes')) return 'exfoliantes';
+    return 'all';
   };
 
-  const mostrarDetalles = (producto) => {
-    console.log(`Mostrando detalles de ${producto.nombre}`);
+  const getSortedProducts = (products, category, sortType) => {
+    let sorted = [...products];
+
+    if (category !== 'all') {
+      sorted = sorted.filter((product) => product.category === category);
+    }
+
+    if (sortType === 'asc') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortType === 'desc') {
+      sorted.sort((a, b) => b.price - a.price);
+    }
+
+    return sorted;
   };
 
-  const handleOrdenarPorPrecio = () => {
-    setOrdenAscendente(!ordenAscendente);
+  const handleSortTypeChange = (type) => {
+    setSortType(type);
   };
-
-  const productosFiltrados = categoriaSeleccionada
-    ? productos.filter((producto) => producto.categoria === categoriaSeleccionada)
-    : productos;
-
-  const productosOrdenados = [...productosFiltrados].sort((a, b) => {
-    return ordenAscendente ? a.precio - b.precio : b.precio - a.precio;
-  });
 
   return (
-    <div className="itemListContainer">
-      <div className="ordenarBotonContainer">
-        <button onClick={handleOrdenarPorPrecio}>
-          Ordenar por Precio {ordenAscendente ? 'Ascendente' : 'Descendente'}
-        </button>
-      </div>
-
-      <div className="productosContainer">
-        {productosOrdenados.map((producto) => (
-          <div key={producto.id} className="producto">
-            <img src={producto.imagen} alt={producto.nombre} className="productoImagen" />
-            <h3>{producto.nombre}</h3>
-            <p>Precio: ${producto.precio}</p>
-            <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
-            <button onClick={() => mostrarDetalles(producto)}>Detalles</button>
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-12">
+          <h2 className="text-center mb-4">Lista de productos</h2>
+          <div className="d-flex justify-content-center mb-3">
+            <button onClick={() => handleSortTypeChange('asc')} className="btn btn-outline-info me-2 custom-btn-green">
+              Ordenar por precio menor <BsArrowDown />
+            </button>
+            <button onClick={() => handleSortTypeChange('desc')} className="btn btn-outline-info custom-btn-green">
+              Ordenar por precio mayor <BsArrowUp />
+            </button>
           </div>
-        ))}
-      </div>
-
-      <div className="carritoContainer">
-        <h2>Carrito de Compras</h2>
-        {carrito.length > 0 ? (
-          <div>
-            {carrito.map((productoCarrito) => (
-              <div key={productoCarrito.id} className="carritoProducto">
-                {productoCarrito.nombre} - ${productoCarrito.precio}
+          <div className="row">
+            {sortedProducts.map((product) => (
+              <div key={product.id} className="col-md-4 mb-4">
+                <Product product={product} />
               </div>
             ))}
           </div>
-        ) : (
-          <p>El carrito está vacío.</p>
-        )}
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default ItemListContainer;
